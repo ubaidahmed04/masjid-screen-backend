@@ -4,6 +4,7 @@ const { ENV } = require("./constants/index.js");
 const UserRoute = require("./routes/user.route.js");
 const connectDB = require("./config/db.js");
 const ScheduleRoute = require("./routes/schedule.route.js");
+const DuaRoute = require("./routes/dua.route.js");
 const app = express()
 connectDB()
 
@@ -13,7 +14,7 @@ app.use(express.json());
 //   credentials: true,
 // };
 // app.use(cors(corsOptions));
-const allowedOrigins = ['http://localhost:5173', 'http://192.168.1.10:5173'];
+const allowedOrigins = ['http://localhost:5173', 'http://192.168.1.10:5173','https://masjid-screen-phi.vercel.app'];
 
 app.use(cors({
   origin: function (origin, callback) {
@@ -33,6 +34,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/auth",UserRoute)
 app.use("/api",ScheduleRoute)
+app.use("/api",DuaRoute)
 
 // Start Server
 app.listen(ENV.PORT, () => {

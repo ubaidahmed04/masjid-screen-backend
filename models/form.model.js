@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const PrayerSchema = new mongoose.Schema({
     name: { type: String, required: true },
+    urdu_title: { type: String, required: true },
     timing: { type: String, required: true }
 });
 

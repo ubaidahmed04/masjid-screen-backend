@@ -18,8 +18,13 @@ const AddPrayerSchedule = async (req, res) => {
         let schedule = await PrayerScheduleModel.findOne({ UID });
 
         if (schedule) {
+            // console.log("schedule---->>>",schedule)
+            schedule.prayers = schedule.prayers.filter(p => p.name && p.timing && p.urdu_title);
             prayers.forEach(prayer => {
-                if (!prayer.name || !prayer.timing) return; // skip invalid entries
+                if (!prayer.name || !prayer.timing || !prayer.urdu_title) {
+                    console.warn("Invalid prayer skipped:", prayer);
+                    return;
+                } // skip invalid entries
                 const index = schedule.prayers.findIndex(p => p.name === prayer.name);
                 if (index !== -1) {
                     schedule.prayers[index].timing = prayer.timing;

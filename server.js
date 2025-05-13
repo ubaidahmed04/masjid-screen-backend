@@ -6,8 +6,28 @@ const connectDB = require("./config/db.js");
 const ScheduleRoute = require("./routes/schedule.route.js");
 const DuaRoute = require("./routes/dua.route.js");
 const app = express()
+const { Server } = require('socket.io');
+const http = require('http');
+const server = http.createServer(app);
 connectDB()
 
+const io = new Server(server, {
+  cors: {
+    origin: '*', // or specify your frontend domain
+  },
+});
+module.exports = { server, io };
+
+// When client connects
+io.on("connection", (socket) => {
+  console.log("Client connected:", socket.id);
+
+  // Optional: join room by UID sent from frontend
+  socket.on('joinRoom', (UID) => {
+    socket.join(UID);
+    console.log(`Socket ${socket.id} joined room ${UID}`);
+  });
+});
 app.use(express.json());
 // const corsOptions = {
 //   origin: ['http://192.168.100.12:5173',''],
@@ -33,11 +53,11 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/auth",UserRoute)
-app.use("/api",ScheduleRoute)
+app.use("/api",ScheduleRoute(io))
 app.use("/api",DuaRoute)
 
 // Start Server
-app.listen(ENV.PORT, () => {
+server.listen(ENV.PORT, () => {
     console.log(`Server running on http://localhost:${ENV.PORT}`);
 });
   

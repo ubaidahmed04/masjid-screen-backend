@@ -5,9 +5,14 @@ const authentication = require('../middlewares/authmiddleware.js');
 const DeletePrayerByName = require('../controllers/Schedule/deleteSchedule.js');
 
 
-const ScheduleRoute =  express.Router()
-ScheduleRoute.post("/addSchedule",authentication, AddPrayerSchedule)
-ScheduleRoute.get("/getSchedule",authentication, GetPrayerSchedule)
-ScheduleRoute.delete("/deleteSchedule",authentication, DeletePrayerByName)
+const ScheduleRoute = (io) => {
+
+    const router = express.Router()
+    const AddPrayerSchedule = require('../controllers/Schedule/addSchedule.js')(io);
+    router.post("/addSchedule", authentication, AddPrayerSchedule)
+    router.get("/getSchedule", authentication, GetPrayerSchedule)
+    router.delete("/deleteSchedule", authentication, DeletePrayerByName)
+    return router
+}
 
 module.exports = ScheduleRoute

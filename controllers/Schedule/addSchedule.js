@@ -1,8 +1,8 @@
 const User = require('../../models/user.model.js');
 const PrayerScheduleModel = require('../../models/form.model.js');
 const { INTERNAL_SERVER_ERROR_MESSAGE } = require('../../constants/index.js');
-
-const AddPrayerSchedule = async (req, res) => {
+const { io } = require('../../server.js'); 
+const AddPrayerSchedule =  (io) => async (req, res) => {
     const { prayers, UID } = req.body;
 
     if (!UID || !Array.isArray(prayers)) {
@@ -37,6 +37,7 @@ const AddPrayerSchedule = async (req, res) => {
         }
 
         await schedule.save();
+        io.to(UID).emit('prayerScheduleUpdated', schedule);
         res.status(201).json({ message: 'Prayer schedule updated successfully', data: schedule });
 
     } catch (error) {

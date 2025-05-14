@@ -54,7 +54,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/auth",UserRoute)
 app.use("/api",ScheduleRoute(io))
-app.use("/api",DuaRoute)
+app.use("/api",DuaRoute(io))
 
 // Start Server
 server.listen(ENV.PORT, () => {

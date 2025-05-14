@@ -2,7 +2,7 @@ const { INTERNAL_SERVER_ERROR_MESSAGE } = require("../../constants/index.js");
 const DuaModel  = require("../../models/dua.model.js")
 const User = require('../../models/user.model.js');
 
-const AddDua = async (req, res) => {
+const AddDua = (io) => async (req, res) => {
     const { UID, duas } = req.body;
 
     if (!UID || !Array.isArray(duas)) {
@@ -27,6 +27,7 @@ const AddDua = async (req, res) => {
         }
 
         await duaDoc.save();
+        io.to(UID).emit('DuaUpdated', duaDoc);
         res.status(201).json({ message: 'Duas saved successfully', data: duaDoc });
 
     } catch (error) {

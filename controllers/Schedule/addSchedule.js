@@ -1,7 +1,6 @@
 const User = require('../../models/user.model.js');
 const PrayerScheduleModel = require('../../models/form.model.js');
 const { INTERNAL_SERVER_ERROR_MESSAGE } = require('../../constants/index.js');
-const { io } = require('../../server.js'); 
 const AddPrayerSchedule =  (io) => async (req, res) => {
     const { prayers, UID } = req.body;
 
@@ -28,6 +27,7 @@ const AddPrayerSchedule =  (io) => async (req, res) => {
                 const index = schedule.prayers.findIndex(p => p.name === prayer.name);
                 if (index !== -1) {
                     schedule.prayers[index].timing = prayer.timing;
+                    schedule.prayers[index].urdu_title = prayer.urdu_title ;
                 } else {
                     schedule.prayers.push(prayer);
                 }

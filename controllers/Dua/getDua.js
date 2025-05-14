@@ -6,15 +6,14 @@ const GetDua  = async (req, res) =>{
     // console.log("user Id",UID)
     try {
         const duaDoc  = await DuaModel.find({UID})
-
-        if (!duaDoc) {
+        if (!duaDoc || duaDoc.length == 0 ) {
             return res.status(404).json({ message: 'No Duas found for this UID' });
         }
         
-        let filteredDuas = duaDoc[0].duas;
+        let filteredDuas = duaDoc[0]?.duas;
         
         if (type) {
-            filteredDuas = filteredDuas.filter(dua => dua.type === type);
+            filteredDuas = filteredDuas?.filter(dua => dua.type === type);
         }
         
         res.status(200).json({

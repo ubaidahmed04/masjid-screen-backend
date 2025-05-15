@@ -11,12 +11,15 @@ const http = require('http');
 const server = http.createServer(app);
 connectDB()
 
-const io = new Server(server, {
-  cors: {
-    origin: '*', // or specify your frontend domain
-  },
-});
-module.exports = { server, io };
+// const io = new Server(server, {
+//   cors: {
+//     origin: '*', // or specify your frontend domain
+//   },
+// });
+// module.exports = { server, io };
+const { init } = require('./constants/socket.js');
+const io = init(server);
+
 
 // When client connects
 io.on("connection", (socket) => {

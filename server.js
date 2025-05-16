@@ -71,6 +71,6 @@ app.use("/api",QRRoute)
 
 // Start Server
 server.listen(ENV.PORT, () => {
-    console.log(`Server running on http://localhost:${ENV.PORT}`);
+    console.log(`Server running on this  http://localhost:${ENV.PORT}`);
 });
   

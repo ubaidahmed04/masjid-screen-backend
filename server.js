@@ -4,6 +4,7 @@ const { ENV } = require("./constants/index.js");
 const UserRoute = require("./routes/user.route.js");
 const connectDB = require("./config/db.js");
 const ScheduleRoute = require("./routes/schedule.route.js");
+const QRRoute = require("./routes/qrcode.route.js")
 const DuaRoute = require("./routes/dua.route.js");
 const app = express()
 const { Server } = require('socket.io');
@@ -37,18 +38,26 @@ app.use(express.json());
 //   credentials: true,
 // };
 // app.use(cors(corsOptions));
-const allowedOrigins = ['http://localhost:5173', 'http://192.168.1.10:5173','https://masjid-screen-phi.vercel.app'];
 
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true)
-    } else {
-      callback(new Error('Not allowed by CORS'))
-    }
+  origin: (origin, callback) => {
+    callback(null, true);  // Allow all origins dynamically
   },
-  credentials: true,
+  credentials: true
 }));
+
+// const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174','http://192.168.1.10:5173','https://masjid-screen-phi.vercel.app'];
+
+// app.use(cors({
+//   origin: function (origin, callback) {
+//     if (!origin || allowedOrigins.includes(origin)) {
+//       callback(null, true)
+//     } else {
+//       callback(new Error('Not allowed by CORS'))
+//     }
+//   },
+//   credentials: true,
+// }));
 
 
 app.get("/", (req, res) => {
@@ -58,6 +67,7 @@ app.get("/", (req, res) => {
 app.use("/api/auth",UserRoute)
 app.use("/api",ScheduleRoute(io))
 app.use("/api",DuaRoute(io))
+app.use("/api",QRRoute)
 
 // Start Server
 server.listen(ENV.PORT, () => {
